@@ -1,3 +1,4 @@
+import { count } from 'node:console'
 import { Process } from '../process/Process'
 import { AddressMemoryProps } from './AddressMemoryProps'
 import { Strategy } from './Strategy'
@@ -84,23 +85,28 @@ export class MemoryManager {
 
   // BEST-FIT
   private findBestFit(size: number): AddressMemoryProps | null {
+    
     let start = -1
     let small = this.physicMemory.length + 1
 
+    
     let memory: AddressMemoryProps | null = null
+    let count = 0
 
     for (let i = 0; i < this.physicMemory.length; i++) {
       let j = i
 
       while (!this.physicMemory[j] && j < this.physicMemory.length) {
         j++
+        count++
       }
 
       const length = j - i
-      if (length >= size && length < small) {
+      if (length >= size && length < small && count < small) {
         start = i
         small = length
         i = j - 1
+        count = 0
       }
     }
 
